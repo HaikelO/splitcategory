@@ -1,6 +1,7 @@
 $(document).ready(function () {
   var pluginPath = "../plugins/splitcategory/ajax/getitilcategories.php";
-
+  var isTreeDepthLimitation = false;
+  var treeDepth = 0;
   var originalSelect = $('select[name="itilcategories_id"]');
   var select2 = $('[aria-labelledby^="select2-dropdown_itilcategories_id"]');
   var container = $("<div></div>").css({
@@ -12,7 +13,7 @@ $(document).ready(function () {
 
   // Function to populate select with options and handle nested subcategories
   function populateSelect(select, categories, parentId, depth) {
-    if (depth < 3) {
+    if (depth < treeDepth || !isTreeDepthLimitation) {
       var relevantCategories = categories.filter(
         (cat) => cat.itilcategories_id == parentId
       );
