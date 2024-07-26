@@ -1,4 +1,3 @@
-var pluginPath = "../plugins/splitcategory/ajax/getitilcategories.php";
 var isTreeDepthLimitation = false;
 var treeDepth = 0;
 var containerSet = false;
@@ -11,7 +10,7 @@ var container = $("<div></div>").css({
 });
 
 var observerCallback = function (mutationsList, observer) {
-  if (originalSelect) {
+  if (originalSelect.length > 0 && select2.length > 0) {
     //Destroy the observer
     observer.disconnect();
 
@@ -70,7 +69,11 @@ function populateSelect(select, categories, parentId, depth) {
 // Fetch categories and initialize the top-level dropdown
 function fetchCategories() {
   $.ajax({
-    url: pluginPath,
+    url:
+      CFG_GLPI.root_doc +
+      "/" +
+      GLPI_PLUGINS_PATH.splitcategory +
+      "/ajax/getitilcategories.php",
     type: "GET",
     dataType: "json",
     success: function (data) {
