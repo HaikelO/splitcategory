@@ -1,9 +1,9 @@
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", (event) => {
   var isTreeDepthLimitation = false;
   var treeDepth = 0;
   var containerSet = false;
-  var originalSelect = $('select[name="itilcategories_id"]');
-  var select2 = $('[aria-labelledby^="select2-dropdown_itilcategories_id"]');
+  var originalSelect;
+  var select2;
   var container = $("<div></div>").css({
     display: "flex",
     flexDirection: "column",
@@ -11,18 +11,26 @@ $(document).ready(function () {
   });
 
   var observerCallback = function (mutationsList, observer) {
-    console.log(originalSelect.length > 0, select2.length > 0);
-    if (originalSelect.length > 0 && select2.length > 0) {
-      //Destroy the observer
-      observer.disconnect();
+    if (
+      document.querySelector(
+        '[aria-labelledby^="select2-dropdown_itilcategories_id"]'
+      ) &&
+      document.querySelector('select[name="itilcategories_id"]')
+    ) {
+      originalSelect = $('select[name="itilcategories_id"]');
+      select2 = $('[aria-labelledby^="select2-dropdown_itilcategories_id"]');
+      if (originalSelect.length > 0 && select2.length > 0) {
+        //Destroy the observer
+        observer.disconnect();
 
-      //Add the container that will hold Dropdowns
-      originalSelect.after(container);
+        //Add the container that will hold Dropdowns
+        originalSelect.after(container);
 
-      fetchCategories();
+        fetchCategories();
 
-      //Hide the old the dropdown
-      select2.parent().parent().hide();
+        //Hide the old the dropdown
+        select2.parent().parent().hide();
+      }
     }
   };
 
@@ -31,6 +39,8 @@ $(document).ready(function () {
   observer.observe(document.body, {
     childList: true,
     subtree: true,
+    attributeOldValue: true,
+    attributes: true,
   });
 
   // Function to populate select with options and handle nested subcategories
